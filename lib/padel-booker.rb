@@ -1,13 +1,26 @@
 require 'capybara'
 require 'capybara/dsl'
 
+require 'selenium-webdriver'
+
+Capybara.register_driver :local_headless_chrome do |app|
+  options = Selenium::WebDriver::Chrome::Options.new
+  options.headless!
+  options.add_argument('--no-sandbox')
+  options.add_argument('--window-size=1920,1024')
+  options.add_argument('--disable-gpu')
+  options.add_argument('--disable-dev-shm-usage')
+
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+end
+
 class PadelBooker
   include Capybara::DSL
 
   attr_reader :session
 
   def initialize
-    Capybara.default_driver = :selenium_chrome
+    Capybara.default_driver = :local_headless_chrome
     @booking_date = Date.today
   end
 
