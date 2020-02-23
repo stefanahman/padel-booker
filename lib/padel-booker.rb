@@ -122,7 +122,7 @@ time_slot = booker.find_time(ENV['TIME_OF_DAY'] || 19)
 
 if time_slot
   time_slot.click
-  # booker.confirm
+  booker.confirm
 
   if booker.booking_success?
     puts "Your time has been booked"
