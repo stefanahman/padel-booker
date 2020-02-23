@@ -117,8 +117,8 @@ booker = PadelBooker.new
 booker.start
 booker.sign_in
 booker.scroll_down
-booker.jump_days(ENV['DAYS_IN_FUTURE'] || 14)
-time_slot = booker.find_time(ENV['TIME_OF_DAY'] || 19)
+booker.jump_days(ENV['DAYS_IN_FUTURE'].to_i || 14)
+time_slot = booker.find_time(ENV['TIME_OF_DAY'].to_i || 19)
 
 if time_slot
   time_slot.click
