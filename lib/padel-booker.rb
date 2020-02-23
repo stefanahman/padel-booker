@@ -118,7 +118,7 @@ booker.start
 booker.sign_in
 booker.scroll_down
 booker.jump_days(ENV['DAYS_IN_FUTURE'].to_i || 14)
-time_slot = booker.find_time(ENV['TIME_OF_DAY'].to_i || 19)
+time_slot = booker.find_time(ENV['TIME_OF_DAY'].to_i || 18)
 
 if time_slot
   time_slot.click
