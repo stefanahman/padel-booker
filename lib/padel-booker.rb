@@ -24,8 +24,20 @@ class PadelBooker
     @booking_date = Date.today
   end
 
-  def start
-    visit "https://www.matchi.se/facilities/padelzenterarsta?lang=en"
+  def base_url
+    "https://www.matchi.se/facilities/padelzenterarsta?lang=en"
+  end
+
+  def visit_homepage
+    visit base_url
+  end
+
+  def visit_current_date
+    visit "#{base_url}&date=#{date_string}"
+  end
+
+  def date_string
+    (Date.today + (ENV['DAYS_IN_FUTURE']&.to_i || 14)).to_s
   end
 
   def scroll_down
@@ -89,8 +101,8 @@ class PadelBooker
       click_on 'Log in'
     end
 
-    fill_in 'username', with: ENV['USERNAME']
-    fill_in 'password', with: ENV['PASSWORD']
+    fill_in 'username', with: ENV['MATCHI_USERNAME']
+    fill_in 'password', with: ENV['MATCHI_PASSWORD']
     click_button 'Log in'
   end
 
@@ -114,11 +126,15 @@ end
 
 booker = PadelBooker.new
 
-booker.start
+booker.visit_homepage
 booker.sign_in
+booker.visit_current_date
 booker.scroll_down
-booker.jump_days(ENV['DAYS_IN_FUTURE'].to_i || 14)
-time_slot = booker.find_time(ENV['TIME_OF_DAY'].to_i || 18)
+
+time1 = ENV['TIME_OF_DAY'].to_i || 18
+time2 = ENV['TIME_OF_DAY2'].to_i || 19
+
+time_slot = booker.find_time(time1) || booker.find_time(time2)
 
 if time_slot
   time_slot.click
